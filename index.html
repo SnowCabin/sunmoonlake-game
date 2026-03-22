@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日月潭桌遊大富翁</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Sans TC -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f5f5f4; /* stone-50 */
+        }
+        .modal-open {
+            overflow: hidden;
+        }
+        .station-card:hover img {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="text-stone-900 selection:bg-emerald-100">
+
+    <!-- Hero Section -->
+    <section class="relative h-[60vh] flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="images/hero_bg.jpg" alt="日月潭美景" class="w-full h-full object-cover brightness-75" onerror="this.src='https://picsum.photos/seed/sunmoonlake/1920/1080?blur=2'">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/40 to-stone-50/100"></div>
+        </div>
+        <div class="relative z-10 text-center px-4">
+            <h1 class="text-5xl md:text-7xl font-bold text-white mb-4 drop-shadow-lg tracking-tight">日月潭桌遊大富翁</h1>
+            <p class="text-xl md:text-2xl text-white/90 font-medium max-w-2xl mx-auto leading-relaxed">南投縣戶外教育及海洋教育中心 & 國立臺中科技大學 共同合作</p>
+        </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-4 -mt-20 relative z-20 pb-20">
+        <!-- Team Selection & Scoreboard -->
+        <section class="bg-white rounded-3xl shadow-xl p-8 mb-12 border border-stone-100">
+            <div class="flex items-center gap-3 mb-8">
+                <i data-lucide="users" class="w-8 h-8 text-emerald-600"></i>
+                <h2 class="text-2xl font-bold">隊伍選擇與計分區</h2>
+            </div>
+            
+            <div id="scoreboard" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Teams will be rendered here -->
+            </div>
+            
+            <div id="team-warning" class="mt-6 flex items-center gap-2 text-amber-600 bg-amber-50 p-4 rounded-xl border border-amber-100">
+                <i data-lucide="alert-circle" class="w-5 h-5"></i>
+                <p class="font-medium">請先點擊上方卡片選擇您的隊伍，再開始探索站點！</p>
+            </div>
+        </section>
+
+        <!-- Station Grid -->
+        <section>
+            <div class="flex items-center gap-3 mb-8">
+                <i data-lucide="trophy" class="w-8 h-8 text-emerald-600"></i>
+                <h2 class="text-2xl font-bold">19 個互動站點</h2>
+            </div>
+            
+            <div id="station-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Stations will be rendered here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Container -->
+    <div id="modal-container" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div id="modal-overlay" class="absolute inset-0 bg-stone-900/60 backdrop-blur-sm"></div>
+        <div id="modal-content" class="relative bg-white w-full max-w-4xl max-h-[90vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+            <!-- Modal Header -->
+            <div class="p-6 border-b border-stone-100 flex justify-between items-center bg-stone-50/50">
+                <div class="flex items-center gap-3">
+                    <div id="modal-station-id" class="bg-emerald-600 text-white w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg shadow-md shadow-emerald-600/20">1</div>
+                    <h2 id="modal-station-name" class="text-2xl font-black text-stone-800">站點名稱</h2>
+                </div>
+                <button onclick="closeModal()" class="p-2 hover:bg-stone-200 rounded-full transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div id="modal-body" class="flex-1 overflow-y-auto p-8">
+                <!-- Content will be rendered here -->
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="p-6 border-t border-stone-100 bg-stone-50/50 flex justify-end">
+                <button onclick="closeModal()" class="px-8 py-3 bg-white border border-stone-200 text-stone-700 rounded-xl font-bold hover:bg-stone-100 transition-colors shadow-sm">
+                    關閉視窗
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-stone-200 py-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-stone-400 font-medium">© 2026 日月潭桌遊大富翁 | 教育性互動平台</p>
+            <div class="mt-4 flex justify-center gap-6">
+                <span class="text-stone-300">南投縣戶外教育及海洋教育中心</span>
+                <span class="text-stone-300">國立臺中科技大學</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- Data ---
+        const STATIONS = [
+            {
+                id: 1,
+                name: "向山遊客中心",
+                questions: [
+                    {
+                        id: "q1_1",
+                        type: "single",
+                        text: "1.下列何者不是向山遊客中心在推動永續旅遊與友善環境服務中的功能？",
+                        options: ["提供遊客服務與環境教育資訊", "設有日月潭多媒體導覽，介紹生態與永續旅遊", "提供纜車環湖服務以增加觀光收入", "設有停車場並推廣綠色交通休息區"],
+                        answer: 2,
+                        analysis: "向山遊客中心強調低碳旅遊與生態保育，並非提供纜車環湖服務，而是鼓勵遊客以步行或自行車方式親近自然，實踐 SDG11「永續城鄉」與 SDG15「陸域生態保育」。"
+                    },
+                    {
+                        id: "q1_2",
+                        type: "single",
+                        text: "2. 為推動綠色旅遊與責任觀光，日月潭向山遊客中心提供多項貼心且永續的服務，下列何者不是其永續服務項目？",
+                        options: ["嬰兒車借用，促進友善旅遊", "醫藥箱借用，確保遊客安全", "提供自行車簡易維修服務，鼓勵低碳出行", "提供過夜住宿以增加遊客停留時間"],
+                        answer: 3,
+                        analysis: "向山遊客中心屬於日間遊客服務據點，並不提供住宿服務；其重點在推動低碳、環境友善的旅遊體驗，呼應 SDG12「責任消費與生產」及 SDG13「氣候行動」。"
+                    }
+                ]
+            },
+            {
+                id: 2,
+                name: "月牙灣",
+                questions: [
+                    {
+                        id: "q2_1",
+                        type: "single",
+                        text: "1. 立槳與獨木舟是日月潭推動低碳與永續觀光的重要水上活動，關於這兩項活動的敘述何者錯誤？",
+                        options: ["建議穿著輕便、快乾的非棉質衣物，減少不適與能源消耗", "氣候不佳時仍可出遊，以免行程延誤", "參加活動者均有體重限制，以維護安全", "活動時必須全程穿著救生衣，確保人身安全"],
+                        answer: 1,
+                        analysis: "氣候惡劣時不宜從事立槳或獨木舟活動，應遵循安全規範與自然條件，尊重環境、保護生命安全。這樣的行為符合 SDG3「健康與福祉」、SDG13「氣候行動」與 SDG14「保育海洋與水域生態」的精神。"
+                    }
+                ]
+            },
+            {
+                id: 3,
+                name: "頭社水庫",
+                description: "匯集大舌滿溪溪水及日月潭水庫滲流水而成，集水面積 55 公頃，有效蓄水量約 23 萬立方公尺，是台灣本島最小的水庫。\n\n注意：請抽一張機會任務卡，若獲得船票，可先收好，抵達 8 號站或 11 號站時可以使用船票前往「遊湖路徑」，若抽到其他任務，請依任務指示動作。"
+            },
+            {
+                id: 4,
+                name: "頭社活盆地",
+                questions: [
+                    {
+                        id: "q4_1",
+                        type: "single",
+                        text: "1. 頭社活盆地是日月潭地區的重要濕地生態系，其土質有助於維持農業生產與生態平衡。下列何者為頭社活盆地的主要土質？",
+                        options: ["砂質土", "泥炭土", "黏質土", "石質土"],
+                        answer: 1,
+                        analysis: "頭社活盆地為台灣少見的泥炭土濕地，具有高含水量與豐富有機質，能儲碳並維持生態多樣性。此特性不僅適合水稻生長，也與 SDG2「消除飢餓」、SDG13「氣候行動」與 SDG15「陸域生態」密切相關。"
+                    },
+                    {
+                        id: "q4_2",
+                        type: "single",
+                        text: "2. 「頭社米，水社魚」是魚池地區流傳的諺語，顯示頭社活盆地土地肥沃、適合種稻。這句諺語最能反映哪一項永續發展理念？",
+                        options: ["推廣觀光以取代農業生產", "尊重自然條件，發展在地特色農業", "全面都市化，提升土地價值", "集中耕作，忽略環境變化"],
+                        answer: 1,
+                        analysis: "諺語展現人與土地和諧共生的智慧，說明地方居民依據自然環境發展農業方式，符合 SDG12「責任消費與生產」與 SDG15「陸域生態保育」的精神。"
+                    }
+                ]
+            },
+            {
+                id: 5,
+                name: "玄光寺",
+                questions: [
+                    {
+                        id: "q5_1",
+                        type: "multiple",
+                        text: "1. 為推動永續發展教育，我們在進行日月潭地區的田野調查時，應做好哪些準備？（複選）",
+                        options: ["準備好地圖，了解當地地理與生態環境", "遵守安全規範，例如不隨意脫隊，維護自身與他人安全", "進行拍照或錄音訪談前，應徵得受訪者同意，尊重隱私與倫理", "事先擬好訪談問題，聚焦在地方永續發展議題"],
+                        answer: [0, 1, 2, 3],
+                        analysis: "田野調查不僅是蒐集資料，更是實踐永續研究倫理與公民責任的過程。透過事前準備、尊重當地居民與文化、維護安全與生態環境，我們能實踐 SDG4「優質教育」、SDG11「永續城鄉」與 SDG16「和平、正義與健全制度」的精神。"
+                    }
+                ]
+            },
+            {
+                id: 6,
+                name: "玄奘寺",
+                questions: [
+                    {
+                        id: "q6_1",
+                        type: "single",
+                        text: "1. 玄奘寺是日月潭地區重要的人文地標，展現宗教文化與歷史傳承。關於玄奘寺的敘述，何者錯誤？",
+                        options: ["二樓匾額題有「日月光華」四字，象徵光明與智慧", "玄奘是清代的佛教大師", "寺內供奉玄奘大師的頂骨舍利，展現對聖僧的尊敬", "玄奘寺為仿唐式建築，碧瓦朱柱，融合傳統文化美學"],
+                        answer: 1,
+                        analysis: "玄奘大師為唐代高僧，致力於佛經翻譯與思想交流。玄奘寺的建築與宗教意涵展現了 SDG4「優質教育」、SDG11「永續城鄉與文化遺產保存」及 SDG16「和平、正義與多元社會」的精神。"
+                    }
+                ]
+            },
+            {
+                id: 7,
+                name: "慈恩塔",
+                questions: [
+                    {
+                        id: "q7_1",
+                        type: "single",
+                        text: "1. 慈恩塔位於日月潭南岸，是結合自然景觀與人文紀念的地標。關於慈恩塔的敘述，何者錯誤？",
+                        options: ["登塔石階上刻有數字，貼心地提醒遊客距離塔頂的距離", "蔣介石為感念母親王太夫人，於 1969 年興建此塔", "與拉魯島、玄光寺、玄奘寺共同形成「幸福連線」，象徵文化與信仰的延續", "夜間也有開放，可隨時前往參觀"],
+                        answer: 3,
+                        analysis: "慈恩塔僅於白天開放，以維護環境安全與文化資產管理。夜間禁止進入是為了保護遊客安全與自然生態，符合 SDG11「永續城鄉與文化遺產保存」及 SDG15「陸域生態」的精神。"
+                    }
+                ]
+            },
+            {
+                id: 8,
+                name: "伊達邵碼頭",
+                questions: [
+                    {
+                        id: "q8_1",
+                        type: "single",
+                        text: "1. 伊達邵碼頭是日月潭地區的重要觀光據點，也是推動永續旅遊與在地文化展現的場所。關於伊達邵碼頭的敘述，何者錯誤？",
+                        options: ["可搭乘環湖遊艇，欣賞湖光山色與地方生態", "是舉辦日月潭花火音樂嘉年華的重要地點", "遊客可自水社碼頭搭船前往伊達邵碼頭", "颱風來襲時仍照常開放，方便旅客遊湖"],
+                        answer: 3,
+                        analysis: "颱風期間伊達邵碼頭會暫停開放與航運，以確保遊客與工作人員安全。這反映出 SDG11「永續城鄉與社區」、SDG13「氣候行動」與 SDG14「保育海洋與水域生態」的精神。"
+                    }
+                ]
+            },
+            {
+                id: 9,
+                name: "日月潭環境保護",
+                questions: [
+                    {
+                        id: "q9_1",
+                        type: "multiple",
+                        text: "1. 為了守護日月潭的自然生態與維持旅遊永續，下列哪些方法能有效降低對環境的威脅？（複選）",
+                        options: ["進行總量管制與遊客分流，減輕生態壓力", "以腳踏車取代機動交通工具，減少碳排放", "鼓勵遊客自備飲料杯與環保餐具，降低一次性垃圾", "選擇低碳、友善環境的水上活動"],
+                        answer: [0, 1, 2, 3],
+                        analysis: "上述行動皆有助於減少污染與碳排放，維持日月潭湖泊生態與景觀品質。實踐了 SDG12「責任消費與生產」、SDG13「氣候行動」與 SDG14「保育海洋與水域生態」的精神。"
+                    },
+                    {
+                        id: "q9_2",
+                        type: "single",
+                        text: "2. 若想以更永續的方式體驗日月潭之美，下列何者不屬於環保型旅遊活動？",
+                        options: ["自力造筏活動", "立槳活動（SUP）", "搭乘獨木舟", "騎乘重型機車環潭"],
+                        answer: 3,
+                        analysis: "重型機車會產生噪音與碳排放，對自然環境造成負擔；相較之下，立槳與獨木舟等活動屬於低碳、親水且環境友善的旅遊方式，更能實踐永續理念。"
+                    }
+                ]
+            },
+            {
+                id: 10,
+                name: "水上安全",
+                questions: [
+                    {
+                        id: "q10_1",
+                        type: "single",
+                        text: "1. 從事海岸水域活動時，若發生緊急危難事件，除了撥打 119，也可以撥打海巡服務專線求助。下列哪一個號碼正確？",
+                        options: ["113", "165", "118"],
+                        answer: 2,
+                        analysis: "海巡署專線 118 提供海域緊急救援與巡護服務，符合 SDG3「健康與福祉」與 SDG11「永續城鄉與社區安全」。"
+                    },
+                    {
+                        id: "q10_2",
+                        type: "single",
+                        text: "2. 發現有人溺水時，下列何種處理方式最安全且符合責任行動原則？",
+                        options: ["視而不見，離開現場", "人命重要，立即下水救人", "尋找救援並大聲呼救"],
+                        answer: 2,
+                        analysis: "自行下水救人可能危及自身安全，正確做法是保持安全距離，尋求專業救援，符合 SDG3「健康與福祉」與 SDG11「社區安全與韌性」理念。"
+                    },
+                    {
+                        id: "q10_3",
+                        type: "single",
+                        text: "3. 若不幸落水，應如何自救以維護生命安全？",
+                        options: ["活命重要，拼命掙扎", "大聲呼救、用盡全力", "保持冷靜、漂浮自救"],
+                        answer: 2,
+                        analysis: "冷靜漂浮可節省體力並增加被救機會，符合 SDG3「健康與福祉」，也是水域活動安全教育的重要原則。"
+                    },
+                    {
+                        id: "q10_4",
+                        type: "single",
+                        text: "4. 救溺五步的口訣為何？",
+                        options: ["叫叫 ABC", "叫叫伸拋划", "叫叫 CAB"],
+                        answer: 1,
+                        analysis: "「叫叫伸拋划」五步驟指引：叫人求助、叫注意、伸手、拋浮具、划救援，確保水域安全與責任救援。"
+                    }
+                ]
+            },
+            {
+                id: 11,
+                name: "水社碼頭",
+                description: "水社碼頭是來到日月潭不可錯過的景點，碧綠的潭水並肩而行，鄰近日月潭潭區交通轉運樞紐。\n\n注意：請抽取一張機會任務卡，若獲得船票，或先前已經獲得船票的玩家，可走遊湖路線前往 8 號站。若抽到其他任務，請依任務指示動作。"
+            },
+            {
+                id: 12,
+                name: "拉魯島",
+                questions: [
+                    {
+                        id: "q12_1",
+                        type: "multiple",
+                        text: "1. 拉魯島（Lalu）是日月潭的重要文化地標，下列敘述何者正確？（複選）",
+                        options: ["「拉魯」取自邵族語，意為「心中聖島」", "島中心的茄苳樹是邵族人所種，象徵族群文化世代傳承", "二戰期間拉魯島被稱為「光華島」，意為「光耀中華」"],
+                        answer: [0, 1],
+                        analysis: "拉魯島承載邵族文化與歷史記憶，其茄苳樹象徵族群文化綿延與自然共生。二戰時的「光華島」名稱是日治時期官方命名（應為戰後，日治時期稱為玉島），反映歷史殖民影響。"
+                    }
+                ]
+            },
+            {
+                id: 13,
+                name: "日月潭纜車站",
+                description: "來到日月潭纜車站，纜車上可一覽日月潭的米其林三星級湖景，這麼好的心情，請抽取一張機會任務吧。\n\n注意：請抽取一張機會任務卡，若獲得船票，請先收好，抵達 11 號站或 8 號站時可以使用船票前往「遊湖路徑」。若抽到其他任務，請依任務指示動作。"
+            },
+            {
+                id: 14,
+                name: "九蛙疊像",
+                questions: [
+                    {
+                        id: "q14_1",
+                        type: "tf",
+                        text: "1. 日月潭滿水位海拔高度 748.48 公尺，也是九蛙疊像最上方青蛙頭頂的高度。九蛙疊羅漢的意象是為了凸顯日月潭抽蓄發電，讓顯示每天不同時段，露出水面的青蛙數量不一樣。以上敘述是否正確？",
+                        answer: true,
+                        analysis: "九蛙疊羅漢不僅是景觀設計，也象徵日月潭作為水力發電及調節水資源的功能。透過這種方式，可引導學生理解 SDG6「清潔水與衛生」與 SDG7「可負擔及清潔能源」的理念。"
+                    }
+                ]
+            },
+            {
+                id: 15,
+                name: "文武廟",
+                questions: [
+                    {
+                        id: "q15_1",
+                        type: "single",
+                        text: "1. 文武廟是日月潭地區重要的文化與教育遺址，下列敘述何者錯誤？",
+                        options: ["廟宇前後共有三殿，依序為拜殿、武聖殿、大成殿", "文武廟的大成殿，是全臺唯一不關門的孔廟", "孔廟禮節需由「黌門」進入，再過「禮門」", "大成殿主祀關聖帝君、岳武穆王"],
+                        answer: 3,
+                        analysis: "大成殿主祀孔子，是祭祀儒家先師的主要空間，武聖殿則供奉關聖帝君與岳飛等武聖。此建築展現歷史與文化教育的傳承，符合 SDG4「優質教育」與 SDG11「永續城市與文化遺產保存」。"
+                    }
+                ]
+            },
+            {
+                id: 16,
+                name: "朝霧碼頭",
+                questions: [
+                    {
+                        id: "q16_1",
+                        type: "single",
+                        text: "1. 關於日月潭的功能與用水，下列敘述何者錯誤？",
+                        options: ["主要功能為供應大觀一廠、鉅工兩座水力發電廠及大觀二廠（明湖）、明潭抽蓄水力發電廠用水", "配合下游農業灌溉需求調節放水", "日月潭的用水僅供遊憩使用", "提供自來水公司使用"],
+                        answer: 2,
+                        analysis: "日月潭的水資源具有多功能用途，包括水力發電、農業灌溉、民生用水與觀光休閒。此多元管理模式反映 SDG6「清潔水與衛生」與 SDG7「可負擔及清潔能源」理念。"
+                    }
+                ]
+            },
+            {
+                id: 17,
+                name: "貓囒山步道",
+                questions: [
+                    {
+                        id: "q17_1",
+                        type: "tf",
+                        text: "1. 貓囒山步道，二旁夾道的種植著就是赫赫有名的茶種，這茶種是阿薩姆紅茶。登頂時更可遠眺九份二山及集集大山，日月潭氣象站便設於海拔 1,020 公尺高處。以上敘述是否正確？",
+                        answer: true,
+                        analysis: "貓囒山步道不僅提供健行與生態教育機會，也展示在地茶農永續經營的成果。透過自然景觀與農業文化的結合，可讓學生理解 SDG2「消除飢餓／永續農業」、SDG13「氣候行動」與 SDG15「陸域生態」的理念。"
+                    }
+                ]
+            },
+            {
+                id: 18,
+                name: "龍鳳廟",
+                description: "來到龍鳳廟，很多人來此求得好姻緣，你也試試你的機會命運，抽一張卡吧。\n\n注意：若獲得船票，請先收好，抵達 11 號站或 8 號站時可以使用船票前往「遊湖路徑」。若抽到其他任務，請依任務指示動作。"
+            },
+            {
+                id: 19,
+                name: "水社壩",
+                questions: [
+                    {
+                        id: "q19_1",
+                        type: "single",
+                        text: "1. 關於日月潭的敘述，下列何者錯誤？",
+                        options: ["日月潭水庫供應大觀一廠、鉅工兩座水力發電廠及大觀二廠（明湖）、明潭抽蓄水力發電廠用水，並配合下游灌溉需求調節放水", "提供自來水公司作為魚池鄉、日月潭、武登地區民生用水", "過去平埔族稱居住於山裡的原住民為「沙連」，而內山以日月潭一區為最大的積水盆地，故日月潭舊稱又為水沙連", "日月潭是台灣原住民邵族的居住地，生活在潭水四周的族人稱其為「水社海」"],
+                        answer: 2,
+                        analysis: "「水沙連」是日月潭舊稱，與平埔族「沙連」稱呼直接相關。此題可引導學生理解 SDG11「永續城市與文化遺產保存」及 SDG4「優質教育」，強調尊重並正確傳承原住民歷史與文化知識。"
+                    },
+                    {
+                        id: "q19_2",
+                        type: "multiple",
+                        text: "2. 「魚虎」被稱為生態殺手，是因為它在水庫與河川幾乎沒有天敵，嚴重擠壓台灣本土魚蝦的生存空間。下列做法哪些能幫助維護本土魚類生態？（複選）",
+                        options: ["控制外來魚種入侵，防止生態失衡", "加強水域環境監測與生態保護", "教育民眾勿隨意放生或引入外來物種", "增加水庫抽蓄頻率以消滅外來魚"],
+                        answer: [0, 1, 2],
+                        analysis: "防止外來魚入侵、保護生態環境與推動永續教育，是落實 SDG14「水下生態保育」與 SDG15「陸域生態」的重要手段。"
+                    }
+                ]
+            }
+        ];
+
+        const TEAMS = [
+            { id: 'red', name: '紅隊', color: 'bg-red-500', hover: 'hover:bg-red-600', text: 'text-red-500' },
+            { id: 'blue', name: '藍隊', color: 'bg-blue-500', hover: 'hover:bg-blue-600', text: 'text-blue-500' },
+            { id: 'yellow', name: '黃隊', color: 'bg-yellow-400', hover: 'hover:bg-yellow-500', text: 'text-yellow-600' },
+            { id: 'green', name: '綠隊', color: 'bg-green-500', hover: 'hover:bg-green-600', text: 'text-green-500' },
+        ];
+
+        // --- State ---
+        let scores = JSON.parse(localStorage.getItem('monopoly_scores')) || { red: 0, blue: 0, yellow: 0, green: 0 };
+        let answeredMap = JSON.parse(localStorage.getItem('monopoly_answered')) || {};
+        let teamAnswersMap = JSON.parse(localStorage.getItem('monopoly_team_answers')) || {};
+        let currentTeam = null;
+        let selectedStation = null;
+        let currentAnswers = {};
+
+        // --- Initialization ---
+        function init() {
+            renderScoreboard();
+            renderStationGrid();
+            lucide.createIcons();
+        }
+
+        // --- Render Functions ---
+        function renderScoreboard() {
+            const container = document.getElementById('scoreboard');
+            container.innerHTML = TEAMS.map(team => `
+                <button onclick="selectTeam('${team.id}')" class="relative overflow-hidden rounded-2xl p-6 transition-all duration-300 border-2 ${currentTeam === team.id ? 'border-stone-900 shadow-lg ring-4 ring-stone-900/5' : 'border-transparent bg-stone-50 hover:bg-stone-100'}">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-lg font-bold ${team.text}">${team.name}</span>
+                        ${currentTeam === team.id ? '<i data-lucide="check-circle-2" class="w-6 h-6 text-stone-900"></i>' : ''}
+                    </div>
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-4xl font-black tabular-nums">${scores[team.id]}</span>
+                        <span class="text-stone-500 font-medium">分</span>
+                    </div>
+                    <div class="absolute bottom-0 left-0 h-2 w-full ${team.color}"></div>
+                </button>
+            `).join('');
+            
+            document.getElementById('team-warning').style.display = currentTeam ? 'none' : 'flex';
+            lucide.createIcons();
+        }
+
+        function renderStationGrid() {
+            const container = document.getElementById('station-grid');
+            container.innerHTML = STATIONS.map(station => {
+                const isAnswered = currentTeam && station.questions?.every(q => answeredMap[`${currentTeam}_${q.id}`]);
+                return `
+                    <div onclick="openStation(${station.id})" class="group cursor-pointer bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-stone-100 station-card ${isAnswered ? 'opacity-75 grayscale-[0.5]' : ''}">
+                        <div class="aspect-video relative overflow-hidden">
+                            <img src="./images/q${station.id}.jpg" alt="${station.name}" class="w-full h-full object-cover transition-transform duration-500" onerror="this.src='https://picsum.photos/seed/lake${station.id}/600/400'">
+                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-bold shadow-sm">站點 ${station.id}</div>
+                            ${isAnswered ? `
+                                <div class="absolute inset-0 bg-emerald-500/20 flex items-center justify-center">
+                                    <div class="bg-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2">
+                                        <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600"></i>
+                                        <span class="font-bold text-emerald-600">已完成</span>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="p-5 flex justify-between items-center">
+                            <h3 class="text-lg font-bold group-hover:text-emerald-600 transition-colors">${station.name}</h3>
+                            <i data-lucide="chevron-right" class="w-5 h-5 text-stone-400 group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        // --- Actions ---
+        window.selectTeam = function(teamId) {
+            currentTeam = teamId;
+            renderScoreboard();
+            renderStationGrid();
+        };
+
+        window.openStation = function(stationId) {
+            selectedStation = STATIONS.find(s => s.id === stationId);
+            currentAnswers = {};
+            
+            // Load previous answers if already answered by current team
+            if (currentTeam && selectedStation.questions) {
+                selectedStation.questions.forEach(q => {
+                    const teamQKey = `${currentTeam}_${q.id}`;
+                    if (answeredMap[teamQKey]) {
+                        currentAnswers[q.id] = teamAnswersMap[teamQKey];
+                    }
+                });
+            }
+            
+            document.getElementById('modal-station-id').innerText = selectedStation.id;
+            document.getElementById('modal-station-name').innerText = selectedStation.name;
+            
+            renderModalBody();
+            
+            document.getElementById('modal-container').classList.remove('hidden');
+            document.body.classList.add('modal-open');
+            lucide.createIcons();
+        };
+
+        window.closeModal = function() {
+            document.getElementById('modal-container').classList.add('hidden');
+            document.body.classList.remove('modal-open');
+            selectedStation = null;
+        };
+
+        function renderModalBody() {
+            const container = document.getElementById('modal-body');
+            let html = `
+                <div class="mb-8 rounded-2xl overflow-hidden shadow-lg">
+                    <img src="./images/q${selectedStation.id}.jpg" alt="${selectedStation.name}" class="w-full h-auto max-h-[400px] object-cover" onerror="this.src='https://picsum.photos/seed/lake${selectedStation.id}/1200/600'">
+                </div>
+            `;
+
+            if (selectedStation.description) {
+                html += `
+                    <div class="bg-emerald-50 p-6 rounded-2xl border border-emerald-100 mb-8">
+                        <div class="flex gap-3">
+                            <i data-lucide="info" class="w-6 h-6 text-emerald-600 shrink-0"></i>
+                            <p class="text-emerald-900 leading-relaxed whitespace-pre-wrap font-medium">${selectedStation.description}</p>
+                        </div>
+                        ${!selectedStation.questions ? `
+                            <button onclick="closeModal()" class="mt-6 w-full py-3 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-600/20">回到選單</button>
+                        ` : ''}
+                    </div>
+                `;
+            }
+
+            if (selectedStation.questions) {
+                html += `<div class="space-y-12">`;
+                selectedStation.questions.forEach(q => {
+                    const teamQKey = `${currentTeam}_${q.id}`;
+                    const isAnswered = answeredMap[teamQKey];
+                    
+                    let isCorrect = false;
+                    if (isAnswered) {
+                        const userAnswer = teamAnswersMap[teamQKey];
+                        if (q.type === 'single' || q.type === 'tf') {
+                            isCorrect = userAnswer === q.answer;
+                        } else {
+                            const target = q.answer;
+                            isCorrect = Array.isArray(userAnswer) && userAnswer.length === target.length && userAnswer.every(v => target.includes(v));
+                        }
+                    }
+                    
+                    html += `
+                        <div id="q-container-${q.id}" class="border-b border-stone-100 pb-12 last:border-0">
+                            <h4 class="text-xl font-bold mb-6 text-stone-800 leading-snug">${q.text}</h4>
+                            <div id="options-${q.id}" class="space-y-3 mb-6">
+                                ${renderOptions(q, isAnswered)}
+                            </div>
+                            <div id="action-${q.id}">
+                                ${!isAnswered ? `
+                                    <div class="flex items-center gap-4">
+                                        <button onclick="submitAnswer('${q.id}')" ${!currentTeam ? 'disabled' : ''} class="flex-1 py-4 bg-stone-900 text-white rounded-xl font-bold hover:bg-stone-800 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">送出答案</button>
+                                        ${q.type === 'multiple' ? `<div id="count-${q.id}" class="bg-emerald-100 text-emerald-700 px-4 py-2 rounded-lg font-bold hidden">已選 0 項</div>` : ''}
+                                    </div>
+                                ` : renderAnalysis(q, isCorrect)}
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            }
+
+            container.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function renderOptions(q, isAnswered) {
+            const currentVal = currentAnswers[q.id];
+            if (q.type === 'tf') {
+                const isTrueCorrect = q.answer === true;
+                const isFalseCorrect = q.answer === false;
+                
+                const getBtnClass = (val) => {
+                    if (isAnswered) {
+                        const isThisCorrect = q.answer === val;
+                        if (isThisCorrect) return 'border-emerald-500 bg-emerald-50 text-emerald-700';
+                        if (currentVal === val) return 'border-red-500 bg-red-50 text-red-700';
+                        return 'border-transparent bg-stone-50 text-stone-400';
+                    }
+                    return currentVal === val ? 'bg-stone-900 text-white border-stone-900 shadow-lg' : 'bg-stone-50 border-transparent hover:bg-stone-100 text-stone-600';
+                };
+
+                return `
+                    <div class="grid grid-cols-2 gap-4">
+                        <button onclick="handleOptionClick('${q.id}', true)" ${isAnswered || !currentTeam ? 'disabled' : ''} class="tf-btn py-6 rounded-2xl font-black text-xl transition-all border-2 ${getBtnClass(true)} ${!isAnswered && !currentTeam ? 'opacity-50 cursor-not-allowed' : ''}">
+                            正確 ${isAnswered && isTrueCorrect ? '<i data-lucide="check" class="inline w-5 h-5 ml-1"></i>' : ''}
+                        </button>
+                        <button onclick="handleOptionClick('${q.id}', false)" ${isAnswered || !currentTeam ? 'disabled' : ''} class="tf-btn py-6 rounded-2xl font-black text-xl transition-all border-2 ${getBtnClass(false)} ${!isAnswered && !currentTeam ? 'opacity-50 cursor-not-allowed' : ''}">
+                            錯誤 ${isAnswered && isFalseCorrect ? '<i data-lucide="check" class="inline w-5 h-5 ml-1"></i>' : ''}
+                        </button>
+                    </div>
+                `;
+            } else {
+                return q.options.map((opt, idx) => {
+                    const isSelected = q.type === 'single' ? currentVal === idx : (currentVal || []).includes(idx);
+                    const isCorrect = q.type === 'single' ? q.answer === idx : (q.answer || []).includes(idx);
+                    
+                    let btnClass = "";
+                    let iconHtml = "";
+                    
+                    if (isAnswered) {
+                        if (isCorrect) {
+                            btnClass = "border-emerald-500 bg-emerald-50 text-emerald-900";
+                            iconHtml = '<i data-lucide="check" class="w-5 h-5 text-emerald-600 ml-auto"></i>';
+                        } else if (isSelected) {
+                            btnClass = "border-red-500 bg-red-50 text-red-900";
+                            iconHtml = '<i data-lucide="x" class="w-5 h-5 text-red-600 ml-auto"></i>';
+                        } else {
+                            btnClass = "border-stone-100 bg-white opacity-50 text-stone-400";
+                        }
+                    } else {
+                        btnClass = isSelected ? 'border-emerald-500 bg-emerald-50 text-emerald-900' : 'border-stone-100 bg-white hover:border-stone-200 text-stone-700';
+                    }
+
+                    return `
+                        <button onclick="handleOptionClick('${q.id}', ${idx})" ${isAnswered || !currentTeam ? 'disabled' : ''} class="option-btn w-full text-left p-4 rounded-xl border-2 transition-all flex items-center gap-4 ${btnClass} ${!isAnswered && !currentTeam ? 'opacity-50 cursor-not-allowed' : ''}">
+                            <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 ${isSelected ? (isAnswered && !isCorrect ? 'border-red-500 bg-red-500' : 'border-emerald-500 bg-emerald-500') : 'border-stone-300'}">
+                                ${isSelected ? '<div class="w-2 h-2 bg-white rounded-full"></div>' : ''}
+                            </div>
+                            <span class="font-medium">${opt}</span>
+                            ${iconHtml}
+                        </button>
+                    `;
+                }).join('');
+            }
+        }
+
+        window.handleOptionClick = function(qId, value) {
+            if (!currentTeam) return;
+            const q = selectedStation.questions.find(q => q.id === qId);
+            
+            if (q.type === 'single' || q.type === 'tf') {
+                currentAnswers[qId] = value;
+            } else {
+                let current = currentAnswers[qId] || [];
+                if (current.includes(value)) {
+                    current = current.filter(v => v !== value);
+                } else {
+                    current.push(value);
+                }
+                currentAnswers[qId] = current;
+                
+                const countEl = document.getElementById(`count-${qId}`);
+                if (countEl) {
+                    countEl.innerText = `已選 ${current.length} 項`;
+                    countEl.classList.toggle('hidden', current.length === 0);
+                }
+            }
+            
+            document.getElementById(`options-${qId}`).innerHTML = renderOptions(q, false);
+        };
+
+        window.submitAnswer = function(qId) {
+            if (!currentTeam) return;
+            const q = selectedStation.questions.find(q => q.id === qId);
+            const userAnswer = currentAnswers[qId];
+            
+            if (userAnswer === undefined || (Array.isArray(userAnswer) && userAnswer.length === 0)) {
+                alert("請選擇答案！");
+                return;
+            }
+
+            let correct = false;
+            if (q.type === 'single' || q.type === 'tf') {
+                correct = userAnswer === q.answer;
+            } else {
+                const target = q.answer;
+                correct = Array.isArray(userAnswer) && userAnswer.length === target.length && userAnswer.every(v => target.includes(v));
+            }
+
+            if (correct) {
+                scores[currentTeam] += 10;
+                localStorage.setItem('monopoly_scores', JSON.stringify(scores));
+                renderScoreboard();
+            }
+
+            answeredMap[`${currentTeam}_${q.id}`] = true;
+            teamAnswersMap[`${currentTeam}_${q.id}`] = userAnswer;
+            localStorage.setItem('monopoly_answered', JSON.stringify(answeredMap));
+            localStorage.setItem('monopoly_team_answers', JSON.stringify(teamAnswersMap));
+            
+            document.getElementById(`options-${qId}`).innerHTML = renderOptions(q, true);
+            document.getElementById(`action-${qId}`).innerHTML = renderAnalysis(q, correct);
+            
+            renderStationGrid();
+            lucide.createIcons();
+        };
+
+        function renderAnalysis(q, correct) {
+            return `
+                <div class="mt-6 p-6 rounded-2xl border-2 ${correct ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200'}">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-lucide="${correct ? 'check-circle-2' : 'alert-circle'}" class="w-6 h-6 ${correct ? 'text-emerald-600' : 'text-red-600'}"></i>
+                        <span class="font-black text-lg ${correct ? 'text-emerald-700' : 'text-red-700'}">${correct ? '答對了！加 10 分' : '答錯了，再接再厲！'}</span>
+                    </div>
+                    <div class="pl-9">
+                        <h5 class="font-bold text-stone-900 mb-2">完整解析：</h5>
+                        <p class="text-stone-700 leading-relaxed">${q.analysis}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Initialize
+        init();
+    </script>
+</body>
+</html>
