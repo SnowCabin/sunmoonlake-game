@@ -404,6 +404,20 @@
             { id: 'green', name: '綠隊', color: 'bg-green-500', hover: 'hover:bg-green-600', text: 'text-green-500' },
         ];
 
+        // --- Audio ---
+        const SOUNDS = {
+            correct: new Audio('https://assets.mixkit.co/active_storage/sfx/600/600-preview.mp3'),
+            wrong: new Audio('https://assets.mixkit.co/active_storage/sfx/2955/2955-preview.mp3')
+        };
+
+        function playSound(type) {
+            if (SOUNDS[type]) {
+                SOUNDS[type].currentTime = 0;
+                SOUNDS[type].play().catch(e => console.log("Audio play blocked:", e));
+            }
+        }
+
+        
         // --- State ---
         let scores = JSON.parse(localStorage.getItem('monopoly_scores')) || { red: 0, blue: 0, yellow: 0, green: 0 };
         let answeredMap = JSON.parse(localStorage.getItem('monopoly_answered')) || {};
@@ -674,10 +688,14 @@
 
             if (correct) {
                 scores[currentTeam] += 10;
-                localStorage.setItem('monopoly_scores', JSON.stringify(scores));
+                localStorage.setItem('monopoly_scores', JSON.stringify(scores)); 
                 renderScoreboard();
+                playSound('correct');
+                } else {
+                playSound('wrong');
             }
 
+            
             answeredMap[`${currentTeam}_${q.id}`] = true;
             teamAnswersMap[`${currentTeam}_${q.id}`] = userAnswer;
             localStorage.setItem('monopoly_answered', JSON.stringify(answeredMap));
