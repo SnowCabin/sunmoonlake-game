@@ -66,6 +66,41 @@
                 <!-- Stations will be rendered here -->
             </div>
         </section>
+
+            <!-- Bonus Section -->
+        <section id="bonus-section">
+            <div class="bg-red-50 border-2 border-red-100 rounded-3xl p-8 mb-8">
+                <div class="flex items-center gap-3 mb-4">
+                    <i data-lucide="sun" class="w-8 h-8 text-red-600"></i>
+                    <h2 class="text-2xl font-bold text-red-900">日潭、月潭停留點：小知識補充包</h2>
+                </div>
+                <p class="text-red-800 font-medium text-lg leading-relaxed">
+                    當走到有太陽或月亮符號的紅色停留點時，可以任選一個小知識補充包答題，答對者加30分。
+                </p>
+            </div>
+            
+            <div id="bonus-grid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
+                <!-- Bonus stations will be rendered here -->
+            </div>
+        </section>
+
+        <!-- Gift Pack Section -->
+        <section id="gift-section" class="mt-16">
+            <div class="bg-amber-50 border-2 border-amber-100 rounded-3xl p-8 mb-8">
+                <div class="flex items-center gap-3 mb-4">
+                    <i data-lucide="party-popper" class="w-8 h-8 text-amber-600"></i>
+                    <h2 class="text-2xl font-bold text-amber-900">歡樂大禮包</h2>
+                </div>
+                <p class="text-amber-800 font-medium text-lg leading-relaxed">
+                    當玩家抽到機會任務中的加分卡時，可任選一個歡樂大禮包加分，試試手氣可以加幾分。
+                    <span class="block text-sm mt-2 text-amber-600/80">* 注意：每個禮包全場僅限領取一次，先搶先贏！</span>
+                </p>
+            </div>
+            
+            <div id="gift-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-6">
+                <!-- Gift packs will be rendered here -->
+            </div>
+        </section>
     </main>
 
     <!-- Modal Container -->
@@ -395,6 +430,93 @@
                     }
                 ]
             }
+            {
+                id: 20,
+                name: "小知識補充包 1",
+                isBonus: true,
+                questions: [{
+                    id: "b1", type: "single", text: "1. 日月潭的舊稱「水沙連」，其中「沙連」一詞源自於？",
+                    options: ["邵族語的音譯", "平埔族對內山原住民的稱呼", "清朝官員的命名", "荷蘭人的記載"],
+                    answer: 1,
+                    analysis: "「水沙連」是日月潭的舊稱，過去平埔族稱居住於山裡的原住民為「沙連」，而內山以日月潭一區為最大的積水盆地，故稱水沙連。"
+                }]
+            },
+            {
+                id: 21,
+                name: "小知識補充包 2",
+                isBonus: true,
+                questions: [{
+                    id: "b2", type: "single", text: "2. 邵族傳說中，祖先是因為追逐哪一種動物才發現日月潭的？",
+                    options: ["白鹿", "黑熊", "水鹿", "山豬"],
+                    answer: 0,
+                    analysis: "相傳邵族祖先在狩獵時追逐一隻白鹿，翻山越嶺後發現了美麗的日月潭，從此定居於此。"
+                }]
+            },
+            {
+                id: 22,
+                name: "小知識補充包 3",
+                isBonus: true,
+                questions: [{
+                    id: "b3", type: "single", text: "3. 拉魯島（Lalu）在邵族文化中具有極神聖的地位，它是？",
+                    options: ["邵族的最高統治中心", "邵族最高祖靈的居住地", "邵族的貿易集散地", "邵族的軍事堡壘"],
+                    answer: 1,
+                    analysis: "拉魯島是邵族人的最高祖靈（pacalar）居住地，也是邵族人求巫（Pataado）的重要場所。"
+                }]
+            },
+            {
+                id: 23,
+                name: "小知識補充包 4",
+                isBonus: true,
+                questions: [{
+                    id: "b4", type: "single", text: "4. 日月潭的水力發電屬於「抽蓄式發電」，其原理是？",
+                    options: ["利用潮汐漲落發電", "利用上下兩個水庫的水位差，在離峰時將水抽回上池", "利用地熱加熱水蒸氣發電", "完全依賴雨水流入發電"],
+                    answer: 1,
+                    analysis: "抽蓄發電是在用電離峰時，利用剩餘電力將下池的水抽回日月潭（上池），待尖峰時再放水發電，是極具效率的儲能方式。"
+                }]
+            },
+            {
+                id: 24,
+                name: "小知識補充包 5",
+                isBonus: true,
+                questions: [{
+                    id: "b5", type: "single", text: "5. 日月潭著名的「九蛙疊像」，其設計初衷是為了？",
+                    options: ["祈求雨水豐沛", "凸顯日月潭抽蓄發電產生的水位變化", "增加觀光拍照景點", "紀念當地的生態保護"],
+                    answer: 1,
+                    analysis: "九蛙疊像旨在讓遊客透過露出水面的青蛙數量，理解日月潭因抽蓄發電而產生的每日水位波動。"
+                }]
+            },
+            {
+                id: 25,
+                name: "小知識補充包 6",
+                isBonus: true,
+                questions: [{
+                    id: "b6", type: "single", text: "6. 日月潭地區著名的「紅玉紅茶」，其品種編號為？",
+                    options: ["台茶 12 號", "台茶 18 號", "台茶 21 號", "台茶 8 號"],
+                    answer: 1,
+                    analysis: "台茶 18 號又稱「紅玉」，是台灣特有的紅茶品種，具有天然肉桂與薄荷香氣，聞名國際。"
+                }]
+            },
+            {
+                id: 26,
+                name: "小知識補充包 7",
+                isBonus: true,
+                questions: [{
+                    id: "b7", type: "tf", text: "7. 日月潭環潭自行車道曾被美國 CNN 旗下網站評選為「全球十大最美自行車道」之一。",
+                    answer: true,
+                    analysis: "是的，日月潭自行車道以其絕美的湖光山色，在 2012 年獲得此項殊榮，吸引全球遊客前來體驗。"
+                }]
+            },
+            {
+                id: 27,
+                name: "小知識補充包 8",
+                isBonus: true,
+                questions: [{
+                    id: "b8", type: "single", text: "8. 日月潭以拉魯島為界，東側形如太陽，西側形如月亮。請問「日潭」位於哪一側？",
+                    options: ["東側", "西側", "北側", "南側"],
+                    answer: 0,
+                    analysis: "日月潭東半部形如圓日，故稱日潭；西半部形如彎月，故稱月潭。"
+                }]
+            }
         ];
 
         const TEAMS = [
@@ -433,6 +555,7 @@
             lucide.createIcons();
         }
 
+        
         // --- Render Functions ---
         function renderScoreboard() {
             const container = document.getElementById('scoreboard');
@@ -456,13 +579,38 @@
 
         function renderStationGrid() {
             const container = document.getElementById('station-grid');
-            container.innerHTML = STATIONS.map(station => {
+            const bonusContainer = document.getElementById('bonus-grid');
+            const GITHUB_IMAGE_BASE = 'https://raw.githubusercontent.com/SnowCabin/sunmoonlake-game-v2/main/images/';
+            
+            const renderCard = (station) => {
                 const isAnswered = currentTeam && station.questions?.every(q => answeredMap[`${currentTeam}_${q.id}`]);
+                const isBonus = station.isBonus;
+                
+                if (isBonus) {
+                    return `
+                        <div onclick="openStation(${station.id})" class="group cursor-pointer bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-red-100 station-card ${isAnswered ? 'opacity-75' : ''}">
+                            <div class="h-20 relative overflow-hidden bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center">
+                                <i data-lucide="gift" class="w-8 h-8 text-white/60"></i>
+                                ${isAnswered ? `
+                                    <div class="absolute inset-0 bg-emerald-500/40 flex items-center justify-center">
+                                        <i data-lucide="check" class="w-6 h-6 text-white"></i>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <div class="p-2 text-center">
+                                <h3 class="text-xs font-bold group-hover:text-red-600 transition-colors truncate">${station.name}</h3>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                const imageUrl = `${GITHUB_IMAGE_BASE}q${station.id}.jpg`;
                 return `
                     <div onclick="openStation(${station.id})" class="group cursor-pointer bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-stone-100 station-card ${isAnswered ? 'opacity-75 grayscale-[0.5]' : ''}">
                         <div class="aspect-video relative overflow-hidden">
-                            <img src="./images/q${station.id}.jpg" alt="${station.name}" class="w-full h-full object-cover transition-transform duration-500" onerror="this.src='https://picsum.photos/seed/lake${station.id}/600/400'">
+                            <img src="${imageUrl}" alt="${station.name}" class="w-full h-full object-cover transition-transform duration-500" onerror="this.src='https://picsum.photos/seed/lake${station.id}/600/400'">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-bold shadow-sm">站點 ${station.id}</div>
+                            
                             ${isAnswered ? `
                                 <div class="absolute inset-0 bg-emerald-500/20 flex items-center justify-center">
                                     <div class="bg-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2">
@@ -478,6 +626,44 @@
                         </div>
                     </div>
                 `;
+            };
+
+            container.innerHTML = STATIONS.filter(s => !s.isBonus).map(renderCard).join('');
+            bonusContainer.innerHTML = STATIONS.filter(s => s.isBonus).map(renderCard).join('');
+            renderGiftPacks();
+            lucide.createIcons();
+        }
+
+        function renderGiftPacks() {
+            const container = document.getElementById('gift-grid');
+            const giftValues = [10, 20, 30, 40];
+            
+            container.innerHTML = giftValues.map((val, idx) => {
+                const claimedBy = giftsClaimed[idx];
+                const isClaimed = !!claimedBy;
+                const team = TEAMS.find(t => t.id === claimedBy);
+                
+                return `
+                    <div onclick="${isClaimed ? '' : `claimGift(${idx}, ${val})`}" class="relative group ${isClaimed ? 'cursor-default' : 'cursor-pointer'} bg-white rounded-2xl overflow-hidden shadow-md border-2 ${isClaimed ? 'border-stone-100 opacity-60' : 'border-amber-200 hover:border-amber-400 hover:shadow-xl'} transition-all h-40 flex flex-col items-center justify-center">
+                        <div class="mb-2 transition-transform duration-500 ${isClaimed ? '' : 'group-hover:scale-125'}">
+                            <i data-lucide="${isClaimed ? 'package-open' : 'package'}" class="w-12 h-12 ${isClaimed ? 'text-stone-300' : 'text-amber-500'}"></i>
+                        </div>
+                        <span class="font-black ${isClaimed ? 'text-stone-400' : 'text-amber-600'}">禮包 ${idx + 1}</span>
+                        
+                        ${isClaimed ? `
+                            <div class="absolute inset-0 bg-stone-900/5 flex flex-col items-center justify-center backdrop-blur-[1px]">
+                                <div class="${team?.color || 'bg-stone-400'} text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-sm mb-1">
+                                    ${team?.name || '未知'} 已領取
+                                </div>
+                                <div class="text-stone-600 font-black text-xl">+${val}</div>
+                            </div>
+                        ` : `
+                            <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i data-lucide="help-circle" class="w-4 h-4 text-amber-400"></i>
+                            </div>
+                        `}
+                    </div>
+                `;
             }).join('');
             lucide.createIcons();
         }
@@ -487,6 +673,7 @@
             currentTeam = teamId;
             renderScoreboard();
             renderStationGrid();
+            renderGiftPacks();
         };
 
         window.openStation = function(stationId) {
@@ -521,11 +708,26 @@
 
         function renderModalBody() {
             const container = document.getElementById('modal-body');
-            let html = `
-                <div class="mb-8 rounded-2xl overflow-hidden shadow-lg">
-                    <img src="./images/q${selectedStation.id}.jpg" alt="${selectedStation.name}" class="w-full h-auto max-h-[400px] object-cover" onerror="this.src='https://picsum.photos/seed/lake${selectedStation.id}/1200/600'">
-                </div>
-            `;
+            const imageUrl = `https://raw.githubusercontent.com/SnowCabin/sunmoonlake-game-v2/main/images/q${selectedStation.id}.jpg`;
+            let html = "";
+            
+            if (!selectedStation.isBonus) {
+                html += `
+                    <div class="mb-8 rounded-2xl overflow-hidden shadow-lg">
+                        <img src="${imageUrl}" alt="${selectedStation.name}" class="w-full h-auto max-h-[400px] object-cover" onerror="this.src='https://picsum.photos/seed/lake${selectedStation.id}/1200/600'">
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="mb-8 p-8 bg-gradient-to-br from-red-50 to-orange-50 rounded-3xl border-2 border-red-100 flex flex-col items-center text-center">
+                        <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                            <i data-lucide="gift" class="w-10 h-10 text-red-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-black text-red-900 mb-2">日潭、月潭停留點</h3>
+                        <p class="text-red-700 font-bold">小知識補充包 - 答對可獲得 30 分！</p>
+                    </div>
+                `;
+            }
 
             if (selectedStation.description) {
                 html += `
@@ -687,15 +889,15 @@
             }
 
             if (correct) {
-                scores[currentTeam] += 10;
-                localStorage.setItem('monopoly_scores', JSON.stringify(scores)); 
+                const points = selectedStation.isBonus ? 30 : 10;
+                scores[currentTeam] += points;
+                localStorage.setItem('monopoly_scores', JSON.stringify(scores));
                 renderScoreboard();
                 playSound('correct');
-                } else {
+            } else {
                 playSound('wrong');
             }
 
-            
             answeredMap[`${currentTeam}_${q.id}`] = true;
             teamAnswersMap[`${currentTeam}_${q.id}`] = userAnswer;
             localStorage.setItem('monopoly_answered', JSON.stringify(answeredMap));
@@ -705,6 +907,50 @@
             document.getElementById(`action-${qId}`).innerHTML = renderAnalysis(q, correct);
             
             renderStationGrid();
+            renderGiftPacks();
+            lucide.createIcons();
+        };
+
+        window.claimGift = function(idx, points) {
+            if (!currentTeam) {
+                alert("請先選擇隊伍！");
+                return;
+            }
+            if (giftsClaimed[idx]) return;
+
+            const team = TEAMS.find(t => t.id === currentTeam);
+            
+            // Update state
+            scores[currentTeam] += points;
+            giftsClaimed[idx] = currentTeam;
+            
+            // Persist
+            localStorage.setItem('monopoly_scores', JSON.stringify(scores));
+            localStorage.setItem('monopoly_gifts_claimed', JSON.stringify(giftsClaimed));
+            
+            // Feedback
+            playSound('correct');
+            renderScoreboard();
+            renderGiftPacks();
+            
+            // Show custom popup (using a simple alert for now, or we could use the modal)
+            // Let's use the modal for a better experience
+            document.getElementById('modal-station-id').innerText = "🎁";
+            document.getElementById('modal-station-name').innerText = "歡樂大禮包";
+            document.getElementById('modal-body').innerHTML = `
+                <div class="py-12 flex flex-col items-center text-center">
+                    <div class="w-24 h-24 bg-amber-100 rounded-full flex items-center justify-center mb-6 animate-bounce">
+                        <i data-lucide="party-popper" class="w-12 h-12 text-amber-600"></i>
+                    </div>
+                    <h3 class="text-3xl font-black text-amber-900 mb-4">恭喜 ${team.name}！</h3>
+                    <p class="text-2xl font-bold text-amber-600 mb-8">獲得了 ${points} 分的加分！</p>
+                    <div class="bg-stone-50 p-6 rounded-2xl border border-stone-100 w-full max-w-md">
+                        <p class="text-stone-500 font-medium">您的總分現在是：<span class="text-stone-900 font-black text-2xl">${scores[currentTeam]}</span> 分</p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('modal-container').classList.remove('hidden');
+            document.body.classList.add('modal-open');
             lucide.createIcons();
         };
 
@@ -713,7 +959,9 @@
                 <div class="mt-6 p-6 rounded-2xl border-2 ${correct ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200'}">
                     <div class="flex items-center gap-3 mb-3">
                         <i data-lucide="${correct ? 'check-circle-2' : 'alert-circle'}" class="w-6 h-6 ${correct ? 'text-emerald-600' : 'text-red-600'}"></i>
-                        <span class="font-black text-lg ${correct ? 'text-emerald-700' : 'text-red-700'}">${correct ? '答對了！加 10 分' : '答錯了，再接再厲！'}</span>
+                        <span class="font-black text-lg ${correct ? 'text-emerald-700' : 'text-red-700'}">
+                            ${correct ? `答對了！加 ${selectedStation.isBonus ? '30' : '10'} 分` : '答錯了，再接再厲！'}
+                        </span>
                     </div>
                     <div class="pl-9">
                         <h5 class="font-bold text-stone-900 mb-2">完整解析：</h5>
@@ -728,3 +976,4 @@
     </script>
 </body>
 </html>
+
