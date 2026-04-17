@@ -33,7 +33,7 @@
         </div>
         <div class="relative z-10 text-center px-4">
             <h1 class="text-5xl md:text-7xl font-bold text-white mb-4 drop-shadow-lg tracking-tight">日月潭桌遊大富翁</h1>
-            <p class="text-xl md:text-2xl text-white/90 font-medium max-w-2xl mx-auto leading-relaxed">南投縣戶外教育及海洋教育中心 & 國立臺中科技大學 共同合作</p> 圖片授權：交通部觀光署日月潭國家風景區管理處</p>
+            <p class="text-xl md:text-2xl text-white/90 font-medium max-w-2xl mx-auto leading-relaxed">南投縣戶外教育及海洋教育中心 & 國立臺中科技大學 共同合作</p>
         </div>
     </section>
 
@@ -580,7 +580,6 @@
         function renderStationGrid() {
             const container = document.getElementById('station-grid');
             const bonusContainer = document.getElementById('bonus-grid');
-            const GITHUB_IMAGE_BASE = 'https://raw.githubusercontent.com/SnowCabin/sunmoonlake-game-v2/main/images/';
             
             const renderCard = (station) => {
                 const isAnswered = currentTeam && station.questions?.every(q => answeredMap[`${currentTeam}_${q.id}`]);
@@ -604,7 +603,7 @@
                     `;
                 }
 
-               const imageUrl = `./images/q${stati on.id}.jpg`;
+                const imageUrl = `./images/q${station.id}.jpg`;
                 return `
                     <div onclick="openStation(${station.id})" class="group cursor-pointer bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-stone-100 station-card ${isAnswered ? 'opacity-75 grayscale-[0.5]' : ''}">
                         <div class="aspect-video relative overflow-hidden">
@@ -714,7 +713,7 @@
             if (!selectedStation.isBonus) {
                 html += `
                     <div class="mb-8 rounded-2xl overflow-hidden shadow-lg">
-                        <img src="${imageUrl}" alt="${selectedStation.name}" class="w-full h-auto max-h-[400px] object-cover" >
+                        <img src="${imageUrl}" alt="${selectedStation.name}" class="w-full h-auto max-h-[400px] object-cover">
                     </div>
                 `;
             } else {
