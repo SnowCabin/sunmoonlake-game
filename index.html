@@ -604,11 +604,11 @@
                     `;
                 }
 
-                const imageUrl = `${GITHUB_IMAGE_BASE}q${station.id}.jpg`;
+               const imageUrl = `./images/q${stati on.id}.jpg`;
                 return `
                     <div onclick="openStation(${station.id})" class="group cursor-pointer bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-stone-100 station-card ${isAnswered ? 'opacity-75 grayscale-[0.5]' : ''}">
                         <div class="aspect-video relative overflow-hidden">
-                            <img src="${imageUrl}" alt="${station.name}" class="w-full h-full object-cover transition-transform duration-500" onerror="this.src='https://picsum.photos/seed/lake${station.id}/600/400'">
+                            <img src="${imageUrl}" alt="${station.name}" class="w-full h-full object-cover transition-transform duration-500">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-bold shadow-sm">站點 ${station.id}</div>
                             
                             ${isAnswered ? `
@@ -714,7 +714,7 @@
             if (!selectedStation.isBonus) {
                 html += `
                     <div class="mb-8 rounded-2xl overflow-hidden shadow-lg">
-                        <img src="${imageUrl}" alt="${selectedStation.name}" class="w-full h-auto max-h-[400px] object-cover" onerror="this.src='https://picsum.photos/seed/lake${selectedStation.id}/1200/600'">
+                        <img src="${imageUrl}" alt="${selectedStation.name}" class="w-full h-auto max-h-[400px] object-cover" >
                     </div>
                 `;
             } else {
